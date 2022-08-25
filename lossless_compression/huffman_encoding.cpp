@@ -14,7 +14,7 @@ typedef std::string string;
 
 struct sort_map
 {
-	UINT freq;
+	DBYTE freq;
 	BYTE val;
 };
 
@@ -104,8 +104,11 @@ void print_tree(huff_node* r) {
 	}
 }
 
-UINT compress(BYTE* src, uint32_t src_size, BYTE* dst, uint32_t* dst_size)
+UINT compress_chunk(BYTE* src, uint32_t src_size, BYTE* dst, uint32_t* dst_size)
 {
+
+	if (src_size >= 65526) { return 1; }
+
 	sort_map freq_map[256];
 	DBYTE code[256];
 	BYTE code_len[256] = {0};
@@ -175,6 +178,7 @@ UINT compress(BYTE* src, uint32_t src_size, BYTE* dst, uint32_t* dst_size)
 
 	/*
 	** pre-order traverse huffman tree
+	** buffer size must be < 65536 or else the codes will exceed 16 bits
 	*/
 	std::list<huff_frame> q3;
 	std::list<huff_frame> q4;
@@ -243,7 +247,7 @@ UINT compress(BYTE* src, uint32_t src_size, BYTE* dst, uint32_t* dst_size)
 	return 0;
 }
 
-UINT decompress(BYTE* src, uint32_t src_size, BYTE* dst, uint32_t* dst_size)
+UINT decompress_chunk(BYTE* src, uint32_t src_size, BYTE* dst, uint32_t* dst_size)
 {
 	DBYTE nodes = *(DBYTE*)src;
 	UINT data_bits = *(UINT*)(src+2);
@@ -321,13 +325,13 @@ int main() {
 	for (size_t i = 0; i < buffer_len; i++){ std::cout << buffer[i]; }
 	std::cout << std::endl << std::endl;
 	
-	compress(buffer, buffer_len, c2, &cl2);
+	compress_chunk(buffer, buffer_len, c2, &cl2);
 
 	std::cout << "compressed: " << std::endl;
 	//for (size_t i = 0; i < cl2; i++){std::cout << c2[i] << " ";}
 	std::cout << std::endl << std::endl;
 
-	decompress(c2, cl2, c3, &cl3);
+	decompress_chunk(c2, cl2, c3, &cl3);
 	
 	std::cout << "decompressed: " << std::endl;
 	for (size_t i = 0; i < cl3; i++) { std::cout << c3[i]; }
