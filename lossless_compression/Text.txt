@@ -1,0 +1,48 @@
+//print for debug
+		for (auto iter = q1.begin(); iter != q1.end(); ++iter)
+		{
+			huffnode tmp = *iter;
+			std::cout << tmp.weight << "  ";
+		}
+		std::cout << std::endl;
+		for (auto iter = q2.begin(); iter != q2.end(); ++iter)
+		{
+			huffnode tmp = *iter;
+			std::cout << tmp.weight << "  ";
+		}
+		std::cout << std::endl;
+
+		//print encodings
+	std::cout << "generated huffman encodings:" << std::endl;
+	for (size_t i = 0; i < 256; i++)
+	{
+		if (code_len[i] > 0) std::cout << (BYTE)i << "   " << (UINT)code_len[i] << ": " << std::bitset<16>(code[i]) << std::endl;
+	}
+
+	//test
+	BYTE buffer[65532];
+	bit_stream data_stream2(leaf_vals);
+	huff_node* root_node = q2.front();
+	huff_node* currnode = root_node;
+	BYTE* currbyte = buffer;
+	for (UINT i = 0; i < data_stream.bits_touched(); i++)
+	{
+		BYTE bit = data_stream2.read_bit();
+
+		if (bit) { currnode = currnode->right; }
+		else { currnode = currnode->left; }
+		
+		if (currnode->left == NULL) {
+			*currbyte++ = currnode->val;
+			currnode = root_node;
+		}
+	}
+
+	for (UINT i = 0; i < currbyte-buffer; i++)
+	{
+		std::cout << buffer[i];
+	}
+	std::cout << std::endl;
+
+	print_tree(root_node);
+	//end test
