@@ -18,13 +18,27 @@
     <ClCompile Include="huffman_encoding.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vogel_encoding.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="book.txt">
       <Filter>Source Files</Filter>
     </Text>
-    <Text Include="Text.txt">
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="huffman_encoding.h">
       <Filter>Source Files</Filter>
-    </Text>
+    </ClInclude>
+    <ClInclude Include="LZ.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vogel_encoding.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

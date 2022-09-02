@@ -46,3 +46,41 @@
 
 	print_tree(root_node);
 	//end test
+
+	void print_tree_help(std::vector<std::vector<BYTE>>& arr, UINT root_offset, tree_node* nodes, BYTE depth)
+{
+	if (arr.size() >= depth) { std::vector<BYTE> a; arr.push_back(a); }
+	arr[depth].push_back(nodes[root_offset].val);
+	for (BYTE i = 0; i < 16; i++)
+	{
+		if (nodes[root_offset].children_offset[i] != 0)
+		{
+			print_tree_help(arr, nodes[root_offset].children_offset[i], nodes, depth + 1);
+		}
+	}
+}
+void print_tree(UINT root_offset, tree_node* nodes)
+{
+	std::cout << "tree: " << std::endl;
+	std::vector<std::vector<BYTE>> arr;
+	print_tree_help(arr, root_offset, nodes, 0);
+	for (BYTE i = 0; i < arr.size(); i++)
+	{
+		for (UINT j = 0; j < arr[i].size(); j++)
+		{
+			std::cout << "|" << std::bitset<8>(arr[i][j]) << "|  ";
+		}
+		std::cout << std::endl;
+	}
+}
+
+
+void print_nibbles(UINT N, BYTE* nibbles)
+{
+	std::cout << "print nibbles:" << std::endl;
+	for (UINT i = 0; i < N; i++)
+	{
+		std::cout << std::bitset<8>(nibbles[i]) << "  ";
+	}
+	std::cout << std::endl;
+}
